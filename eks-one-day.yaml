@@ -1,0 +1,14 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: one-day-cluster
+  region: ap-south-1
+  version: "1.30"
+
+managedNodeGroups:
+  - name: test-node
+    instanceType: t4g.medium
+    desiredCapacity: 1
+    minSize: 1
+    maxSize: 1
