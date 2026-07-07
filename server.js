@@ -60,3 +60,18 @@ process.on('SIGTERM', () => {
     process.exit(0);
   });
 });
+
+// Update this route in your server.js file
+app.get('/users', async (req, res) => {
+  try {
+    // Query the actual rows we just inserted
+    const { rows } = await pool.query('SELECT id, name, email FROM users LIMIT 10');
+    res.json({ 
+      message: "Connected successfully!", 
+      data: rows 
+    });
+  } catch (err) {
+    console.error('Database query error:', err);
+    res.status(500).json({ error: 'Database query failed' });
+  }
+});
