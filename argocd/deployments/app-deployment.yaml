@@ -15,7 +15,7 @@ spec:
       containers:
         - name: microservice
           # Replace this with your actual local or DockerHub image string
-          image: rahulselvam/node-api:latest 
+          image: rahulselvam/node-api:1
           ports:
             - containerPort: 3000
           env:
