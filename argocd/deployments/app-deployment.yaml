@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-microservice
+spec:
+  replicas: 2 # Standard multi-pod resilience
+  selector:
+    matchLabels:
+      app: my-microservice
+  template:
+    metadata:
+      labels:
+        app: my-microservice
+    spec:
+      containers:
+        - name: microservice
+          # Replace this with your actual local or DockerHub image string
+          image: rahulselvam/node-api:latest 
+          ports:
+            - containerPort: 3000
+          env:
+            - name: PORT
+              value: "3000"
+            - name: DB_HOST
+              value: "postgres-service" # Targets the database service name
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_NAME
+              value: "mydb"
+            - name: DB_USER
+              value: "postgresuser"
+            - name: DB_PASSWORD
+              value: "securepassword123"
+          # Liveness and Readiness probes guarantee Kubernetes won't route traffic
+          # to your service until the database link is live and healthy.
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 15
+            periodSeconds: 20
